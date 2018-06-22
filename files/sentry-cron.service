@@ -1,0 +1,14 @@
+[Unit]
+Description=Sentry Beat Service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/www/sentry
+Environment=SENTRY_CONF=/etc/sentry
+ExecStart=/www/sentry/bin/sentry run cron
+
+[Install]
+WantedBy=multi-user.target

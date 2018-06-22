@@ -1,0 +1,14 @@
+[Unit]
+Description=Sentry Background Worker
+After=network.target
+
+[Service]
+Type=simple
+User=sentry
+Group=sentry
+WorkingDirectory=/www/sentry
+Environment=SENTRY_CONF=/etc/sentry
+ExecStart=/www/sentry/bin/sentry run worker
+
+[Install]
+WantedBy=multi-user.target

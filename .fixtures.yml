@@ -1,0 +1,9 @@
+---
+fixtures:
+  forge_modules:
+     stdlib: "puppetlabs/stdlib"
+     concat: "puppetlabs/concat"
+     epel: "stahnma/epel"
+     python: "stankevich/python"
+     postgresql: "puppetlabs/postgresql"
+     redis: "arioch/redis"
