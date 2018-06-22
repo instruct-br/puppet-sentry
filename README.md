@@ -171,7 +171,7 @@ String to configure default mail sender. Default to an empty string.
 
 ## Limitations
 
-- After installing and configuring Sentry using this module, you will still need do run the `sentry createuser` command to create your user.
+- After installing and configuring Sentry using this module, you will still need to run the `sentry createuser` command to create your user.
 - This module was tested only in CentOS 7.
 
 ## Development
@@ -183,8 +183,8 @@ This module was developed using
 - Puppet 5.5.3
   - Facter 3.11.2
 - CentOS 7.5
-- VirtualBox 5.2.12
-- Vagrant 2.1.1
+- VirtualBox 5.2.10
+- Vagrant 2.0.2
 
 ### Testing
 
@@ -210,23 +210,3 @@ This module uses puppet-lint, puppet-syntax, metadata-json-lint and rspec-puppet
 Igor Oliveira (igor at instruct dot com dot br)
 
 ### Contributors
-
-
-## Setup
-
-Via git:
-
-```
-# cd /etc/puppetlabs/code/environment/production/modules
-# git clone https://github.com/instruct-br/puppet-sentry.git sentry
-```
-Via puppet:
-
-```
-# puppet module install instructbr/sentry`
-```
-Via puppetfile:
-
-```
-mod 'instructbr-sentry'
-```
