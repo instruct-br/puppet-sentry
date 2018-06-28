@@ -55,7 +55,7 @@ redis.clusters:
     hosts:
       0:
         host: 127.0.0.1
-        port: <%= $redis_port %>
+        port: 6379
 
 ################
 # File storage #

@@ -2,14 +2,12 @@
 #
 # @summary Installs dependencies and configures Sentry
 class sentry::config {
-  package { 'postgresql-contrib':
-    ensure => 'installed',
-  }
 
-  class { 'redis':
-    bind    => '127.0.0.1',
-    port    => $sentry::redis_port,
+  package { ['postgresql-contrib',
+            'redis']:
+    ensure  => 'installed',
     require => Class['python'],
+    before  => [Postgresql::Server::Extension['citext'], Exec['init-sentry']],
   }
 
   class { 'postgresql::server':
@@ -24,7 +22,7 @@ class sentry::config {
   postgresql::server::extension { 'citext':
     ensure   => 'present',
     database => 'sentry',
-    require  => [Package['postgresql-contrib'], Postgresql::Server::Db['sentry']],
+    require  => Postgresql::Server::Db['sentry'],
   }
 
   file { '/etc/sentry':
@@ -35,7 +33,7 @@ class sentry::config {
   exec { 'init-sentry':
     command  => 'SENTRY_CONF=/etc/sentry /www/sentry/bin/sentry init /etc/sentry',
     provider => 'shell',
-    require  => [Python::Pip['install-sentry'], Class['redis'], Postgresql::Server::Extension['citext']],
+    require  => [Python::Pip['install-sentry'], Postgresql::Server::Extension['citext']],
   }
 
   file { '/etc/sentry/sentry.conf.py':
@@ -46,7 +44,6 @@ class sentry::config {
       postgres_password => $sentry::postgres_password,
       postgres_port     => $sentry::postgres_port,
       sentry_port       => $sentry::port,
-      redis_port        => $sentry::redis_port,
     }),
     require => Exec['init-sentry'],
     before  => Exec['upgrade-sentry'],
@@ -56,7 +53,6 @@ class sentry::config {
     ensure  => present,
     owner   => 'sentry',
     content => epp('sentry/config.yml.epp', {
-      redis_port    => $sentry::redis_port,
       mail_backend  => $sentry::mail_backend,
       mail_host     => $sentry::mail_host,
       mail_username => $sentry::mail_username,

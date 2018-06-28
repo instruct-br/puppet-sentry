@@ -1,7 +1,6 @@
 # Class sentry
 class sentry (
   Integer $port = 9000,
-  Integer $redis_port = 6379,
   String $postgres_user = 'sentry',
   String $postgres_password = 'sentry',
   Integer $postgres_port = 5432,
