@@ -22,6 +22,7 @@ class sentry::config {
   }
 
   postgresql::server::extension { 'citext':
+    ensure   => 'present',
     database => 'sentry',
     require  => [Package['postgresql-contrib'], Postgresql::Server::Db['sentry']],
   }
@@ -32,10 +33,9 @@ class sentry::config {
   }
 
   exec { 'init-sentry':
-    command  => 'SENTRY_CONF=/etc/sentry sentry init /etc/sentry',
+    command  => 'SENTRY_CONF=/etc/sentry /www/sentry/bin/sentry init /etc/sentry',
     provider => 'shell',
-    path     => '/www/sentry/bin',
-    require  => Python::Pip['install-sentry'],
+    require  => [Python::Pip['install-sentry'], Class['redis'], Postgresql::Server::Extension['citext']],
   }
 
   file { '/etc/sentry/sentry.conf.py':
@@ -49,6 +49,7 @@ class sentry::config {
       redis_port        => $sentry::redis_port,
     }),
     require => Exec['init-sentry'],
+    before  => Exec['upgrade-sentry'],
   }
 
   file { '/etc/sentry/config.yml':
@@ -63,13 +64,13 @@ class sentry::config {
       mail_from     => $sentry::mail_from,
     }),
     require => Exec['init-sentry'],
+    before  => Exec['upgrade-sentry'],
   }
 
   exec { 'upgrade-sentry':
-    command  => 'SENTRY_CONF=/etc/sentry sentry upgrade --noinput',
+    command  => 'SENTRY_CONF=/etc/sentry /www/sentry/bin/sentry upgrade --noinput',
+    timeout  => 0,
     provider => 'shell',
-    path     => '/www/sentry/bin',
-    require  => [Class['redis'], Postgresql::Server::Extension['citext'], Exec['init-sentry']],
   }
 
   file { '/etc/systemd/system/sentry-web.service':

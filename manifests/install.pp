@@ -1,6 +1,6 @@
 # A description of what this class does
 #
-# @summary Configures the environment, installs necessary system packages and isntalls Sentry via pip 
+# @summary Configures the environment, installs necessary system packages and isntalls Sentry via pip
 class sentry::install {
   class { 'python' :
     version    => 'system',
@@ -12,7 +12,8 @@ class sentry::install {
 
   package { ['python-setuptools', 'gcc', 'gcc-c++', 'libffi-devel', 'libjpeg-devel',
               'libxml2-devel', 'libxslt-devel', 'libyaml-devel', 'libpqxx-devel']:
-    ensure => installed,
+    ensure  => installed,
+    require => Class['python']
   }
 
   group { 'sentry':

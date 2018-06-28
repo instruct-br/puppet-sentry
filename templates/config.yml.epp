@@ -7,7 +7,7 @@
 # Mail Server #
 ###############
 
-mail.backend: 'smtp'  # Use dummy if you want to disable email entirely
+mail.backend: '<%= mail_backend %>'  # Use dummy if you want to disable email entirely
 mail.host: '<%= mail_host %>'
 mail.port: 25
 mail.username: '<%= mail_username %>'
