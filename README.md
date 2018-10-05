@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/instruct-br/puppet-sentry.svg?branch=master)](https://travis-ci.org/instruct-br/puppet-sentry) ![License](https://img.shields.io/badge/license-Apache%202-blue.svg) ![Version](https://img.shields.io/puppetforge/v/instructbr/sentry.svg) ![Downloads](https://img.shields.io/puppetforge/dt/instructbr/sentry.svg)
+![License](https://img.shields.io/badge/license-Apache%202-blue.svg) ![Version](https://img.shields.io/puppetforge/v/instruct/sentry.svg) ![Downloads](https://img.shields.io/puppetforge/dt/instruct/sentry.svg)
 
 # sentry
 
-#### Table of contents
+## Table of contents
 
 1. [Overview](#overview)
 1. [Supported Platforms](#supported-platforms)
@@ -15,9 +15,9 @@
 
 ## Overview
 
-This module will install Sentry and its dependencies (Postgresql and Redis).
+This module installs Sentry and its dependencies (Postgresql and Redis).
 
-It will also manage Sentry's configurations.
+It also manages Sentry's configurations.
 
 ## Supported Platforms
 
@@ -46,7 +46,7 @@ Via puppet:
 
     # puppet module install instruct/sentry
 
-Via `puppetfile`:
+Via `Puppetfile`:
 
     mod 'instruct-sentry'
 
@@ -54,7 +54,7 @@ Via `puppetfile`:
 
 ### Quick run
 
-    puppet apply -e "include sentry"
+puppet apply -e "include sentry"
 
 ### Using with parameters
 
@@ -73,7 +73,7 @@ class { 'sentry':
   port              => 5000,
   redis_port        => 6380,
   postgres_user     => 'sentry_user',
-  postgres_password => 'sentry_pass',
+  postgres_password => 'changeme',
   postgres_port     => '5433',
 }
 ```
@@ -85,7 +85,7 @@ class { 'sentry':
   port              => 5000,
   redis_port        => 6380,
   postgres_user     => 'sentry_user',
-  postgres_password => 'sentry_pass',
+  postgres_password => 'changeme',
   postgres_port     => '5433',
   mail_backend      => 'smtp',
   mail_host         => 'http://smtp-adress.com',
@@ -113,6 +113,18 @@ sentry::service (private)
 Type: Integer
 
 Integer to configure Sentry's port. Default to 9000
+
+#### `manage_redis`
+
+Type: Boolean
+
+Whether this module should install Redis or not. Default to true.
+
+#### `manage_postgres`
+
+Type: Boolean
+
+Whether this module should install PostgreSQL or not. Default to true.
 
 #### `redis_port`
 
@@ -171,7 +183,8 @@ String to configure default mail sender. Default to an empty string.
 
 ## Limitations
 
-- After installing and configuring Sentry using this module, you will still need to run the `sentry createuser` command to create your user.
+- Sentry's user is not created automatically, after installing and configuring Sentry using this module you will still need to run the `sentry createuser` command to create it.
+
 - This module was tested only in CentOS 7.
 
 ## Development
@@ -192,18 +205,19 @@ This module uses puppet-lint, puppet-syntax, metadata-json-lint and rspec-puppet
 
 #### Installing gems
 
-    gem install bundler --no-document
-    bundle install --without development
+gem install bundler --no-document
+
+bundle install --without development
 
 #### Running syntax tests
 
-    bundle exec rake syntax
-    bundle exec rake lint
-    bundle exec rake metadata_lint
+bundle exec rake syntax
+bundle exec rake lint
+bundle exec rake metadata_lint
 
 #### Running unit tests
 
-    bundle exec rake spec
+bundle exec rake spec
 
 ### Author
 

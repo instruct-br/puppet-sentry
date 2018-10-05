@@ -1,14 +1,14 @@
-# A description of what this class does
+# Manages services
 #
-# @summary Manages Sentry's services
+# @summary Manages services
 class sentry::service {
+
   service { ['sentry-cron',
               'sentry-worker',
               'sentry-web']:
-    ensure     => running,
-    provider   => 'systemd',
-    enable     => true,
-    hasrestart => true,
-    hasstatus  => true,
+    ensure   => running,
+    provider => 'systemd',
+    enable   => true,
   }
+
 }

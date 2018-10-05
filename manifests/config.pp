@@ -1,17 +1,12 @@
-# A description of what this class does
+# Manage Sentry's configurations
 #
-# @summary Installs dependencies and configures Sentry
+# @summary Manages configurations
 class sentry::config {
 
-  package { ['postgresql-contrib',
-            'redis']:
-    ensure  => 'installed',
+  package { 'postgresql-contrib':
+    ensure  => installed,
     require => Class['python'],
     before  => [Postgresql::Server::Extension['citext'], Exec['init-sentry']],
-  }
-
-  class { 'postgresql::server':
-    port => $sentry::postgres_port,
   }
 
   postgresql::server::db { 'sentry':
@@ -20,13 +15,13 @@ class sentry::config {
   }
 
   postgresql::server::extension { 'citext':
-    ensure   => 'present',
+    ensure   => present,
     database => 'sentry',
     require  => Postgresql::Server::Db['sentry'],
   }
 
   file { '/etc/sentry':
-    ensure => 'absent',
+    ensure => absent,
     force  => true,
   }
 
@@ -83,4 +78,5 @@ class sentry::config {
     mode   => '0644',
     source => 'puppet:///modules/sentry/sentry-worker.service',
   }
+
 }

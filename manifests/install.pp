@@ -1,13 +1,28 @@
-# A description of what this class does
+# Configures the environment, installs necessary system packages and isntalls Sentry via pip
 #
-# @summary Configures the environment, installs necessary system packages and isntalls Sentry via pip
+# @summary Installs Sentry and its dependencies
 class sentry::install {
+
   class { 'python' :
     version    => 'system',
     pip        => 'present',
     dev        => 'present',
     virtualenv => 'present',
     use_epel   => true,
+  }
+
+  if $sentry::manage_postgres {
+    class { 'postgresql::server':
+      port => $sentry::postgres_port,
+    }
+  }
+
+  if $sentry::manage_redis {
+    package { 'redis':
+      ensure  => installed,
+      require => Class['python'],
+      notify  => Service['redis'],
+    }
   }
 
   package { ['python-setuptools', 'gcc', 'gcc-c++', 'libffi-devel', 'libjpeg-devel',
@@ -45,4 +60,11 @@ class sentry::install {
     virtualenv => '/www/sentry',
     owner      => 'sentry',
   }
+
+  service { 'redis':
+    ensure   => running,
+    provider => 'systemd',
+    enable   => true,
+  }
+
 }
